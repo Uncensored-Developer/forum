@@ -2,11 +2,20 @@ const express      = require('express');
 const path         = require('path');
 const cookieParser = require('cookie-parser');
 const logger       = require('morgan');
+const cors         = require('cors');
 const api          = require('../api');
 const config       = require('../config');
 
 
 module.exports = ({app}) => {
+
+  // Health check
+  app.get('/status', (req, res) => {
+    res.status(200).end();
+  });
+
+  app.enable('trust proxy');
+  app.use(cors());
 
   app.use(logger('dev'));
   app.use(express.json());
