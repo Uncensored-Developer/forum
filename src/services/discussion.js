@@ -9,7 +9,19 @@ module.exports = class DiscussionService {
     try {
       this.logger.silly('Fetching discussions from db');
 
-      return this.discussionModel.find(filter);
+      return await this.discussionModel.find(filter);
+
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
+  }
+
+  async delete(filter) {
+    try {
+      this.logger.silly('Fetching discussions from db');
+
+      return await this.discussionModel.deleteOne(filter)
 
     } catch (e) {
       this.logger.error(e);
@@ -21,6 +33,7 @@ module.exports = class DiscussionService {
 
     try {
       this.logger.silly('Saving discussion to db');
+      discussionInput.posts_count = 0;
       const discussion = await this.discussionModel.create(discussionInput);
       if (!discussion) {
         this.logger.error('Failed to create discussion');

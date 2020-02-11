@@ -19,23 +19,10 @@ const Post = new mongoose.Schema(
     }
   },
   {
-    timestamps: true,
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true}
+    timestamps: true
   }
 );
 
-Post.virtual('comments', {
-  ref: 'Comment',
-  localField: '_id',
-  foreignField: 'post'
-});
 
-Post.pre('find', autoPopulateComments);
-
-function autoPopulateComments (next) {
-  this.populate('comments', 'body');
-  next()
-}
 
 module.exports = mongoose.model('Post', Post);

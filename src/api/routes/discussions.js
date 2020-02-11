@@ -17,6 +17,32 @@ module.exports = app => {
     })
   );
 
+  router.get(
+    '/:id',
+    eah(async (req, res) => {
+      const discussionService = typedi.Container.get(discussion);
+      const results = await discussionService.get(req.params.id);
+      return res.json(results).status(200);
+    })
+  );
+
+  router.delete(
+    '/:id',
+    celebrate.celebrate({
+      body: celebrate.Joi.object({
+        creator: celebrate.Joi.string().required()
+      })
+    }),
+    eah(async (req, res) => {
+      const discussionService = typedi.Container.get(discussion);
+      const results = await discussionService.delete({
+        _id: req.params.id,
+        creator: req.body.creator
+      });
+      return res.json(results).status(200);
+    })
+  );
+
   router.post(
     '/',
     celebrate.celebrate({
